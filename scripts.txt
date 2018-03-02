@@ -1,0 +1,5 @@
+#!/bin/bash
+cd Desktop/Myproject
+source flask/Scripts/activate
+./flask/Scripts/gunicorn --bind 0.0.0.0:5000 --workers=2 --worker-class gevent --access-logfile access.log --error-logfile error.log app:app
+

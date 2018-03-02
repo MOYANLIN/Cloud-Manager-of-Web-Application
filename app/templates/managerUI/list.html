@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+    <style>
+        .btns { background-color: black;
+               border: 1px solid green;
+               color: white;
+               padding:5px 10px;
+               cursor: pointer;
+               float: center;
+               }
+        .editor-label{
+                text-align:left;
+                }
+
+
+    </style>
+    <form action="{{url_for('ec2_create')}}" method="post">
+          <div style="width:100%;text-align:center">
+            <input type="submit" class="btns" value="New Instance"></div>
+    </form>
+    <br>
+    <form action="{{url_for('delete_all')}}" method='post' onsubmit='return confirm("Are you sure to delete all data of users and images?")'>
+          <div style="width:100%;text-align:center">
+              <input type='submit' class="btns" value="Delete user data"></div>
+                </form>
+    <br>
+    <table border="1" width="100%">
+
+    <thead>
+       <th>ID</th>
+       <th>Type</th>
+       <th>Availablity Zone</th>
+       <th>Status</th>
+       <th>View</th>
+       <th>Destory</th>
+    </thead> 
+    {% for instance in instances %}
+        <tr>
+            <td>{{ instance.id }}</td>
+            <td>{{ instance.instance_type }}</td>
+            <td>{{ instance.placement['AvailabilityZone'] }}</td>
+            <td>{{ instance.state['Name'] }}</td>
+            <td>
+                <form action="{{url_for('ec2_view',id=instance.id)}}" method='get'>
+                    <input type='submit' class="btns" value='Details' />
+                </form>
+            </td>
+         
+            <td>
+                <form action="{{url_for('ec2_shrink',id=instance.id)}}" method='post' onsubmit='return confirm("Are you sure?")'>
+                    <input type='submit' class="btns" value='Destory' />
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    
+
+    </table>
+    <br>
+    <br>
+    <form action="{{url_for('open_auto_scaling')}}" method='post' onsubmit='return confirm("Are you sure to open auto-scaling?")'>
+        <p style="front-family:arial;color:red;front-size:20px;">Please reload the page to see instances changes.</p>
+        <div class="editor-label">
+                    <label for="up_threshold">Up threshold:</label>
+
+					<input type="text" name="up_threshold" size="40" placeholder="Enter interger between 1 and 100">
+
+                    <br>
+                    <br>
+					<label for="down_threshold">Down threshold:</label>
+					<input type="text" name="down_threshold" size="40"placeholder="Enter interger between 1 and 100">
+					<br>
+                    <br>
+					<label for="expand_ratio">Expand ratio:</label>
+					<input type="text" name="expand_ratio" size="40" placeholder="Enter positive interger">
+                    <label for="expand_ratio">eg. enter 2 will double the number of workers</label>
+					<br>
+                    <br>
+					<label for="shrink_ratio">Shrink ratio:</label>
+					<input type="text" name="shrink_ratio" size="40" placeholder="Enter positive interger">
+                    <label for="shrink_ratio">eg. enter 4 will shrink 75% of workers</label>
+					<br>
+                    <br>
+                    <input type='submit' class="btns" value='Open auto-scaling' />
+                    
+        </div>
+
+            
+	</form>
+
+    <br>
+    <form action="{{url_for('close_auto_scaling')}}" method='post' onsubmit='return confirm("Are you sure to close auto-scaling?")'>
+        <div class="editor-label">
+            <input type='submit' class="btns" value='Close auto-scaling' ></div>
+    </form>
+    
+{% endblock %}

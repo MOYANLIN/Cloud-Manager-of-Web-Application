@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+     <br>
+     <br>
+     <style>
+      .btns { background-color: black;
+               border: 1px solid green;
+               color: white;
+               padding:5px 10px;
+               cursor: pointer;
+               float: center;
+               }
+     </style>
+     <form action="{{url_for('ec2_list')}}" method="get">
+         <div style="width:100%;text-align:center">
+             <input type="submit" class="btns"  value="View all examples"></div>
+     </form>
+    </form>
+
+
+{% endblock %}
